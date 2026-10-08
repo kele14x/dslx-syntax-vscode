@@ -1,0 +1,42 @@
+{
+  "name": "dslx-syntax",
+  "displayName": "DSLX Syntax",
+  "description": "Syntax highlighting and editing support for Google XLS DSLX, with no language server required.",
+  "version": "0.1.0",
+  "publisher": "local",
+  "private": true,
+  "license": "UNLICENSED",
+  "engines": {
+    "vscode": "^1.85.0"
+  },
+  "categories": ["Programming Languages"],
+  "keywords": ["dslx", "xls", "hardware", "syntax"],
+  "contributes": {
+    "languages": [
+      {
+        "id": "dslx",
+        "aliases": ["DSLX", "dslx"],
+        "extensions": [".x", ".dslx"],
+        "configuration": "./language-configuration.json"
+      }
+    ],
+    "grammars": [
+      {
+        "language": "dslx",
+        "scopeName": "source.dslx",
+        "path": "./syntaxes/dslx.tmLanguage.json"
+      }
+    ]
+  },
+  "scripts": {
+    "test": "node --test test/grammar.test.cjs",
+    "test:editor": "node test/run-editor.cjs",
+    "package": "npm test && vsce package --allow-missing-repository --skip-license --no-dependencies"
+  },
+  "devDependencies": {
+    "@vscode/test-electron": "^3.1.0",
+    "@vscode/vsce": "^4.0.0",
+    "vscode-oniguruma": "^2.0.1",
+    "vscode-textmate": "^9.3.2"
+  }
+}
