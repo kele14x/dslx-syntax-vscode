@@ -71,6 +71,20 @@ test('manifest contributes a self-contained, runtime-free DSLX grammar', async (
   checkIncludes(rawGrammar);
 });
 
+test('includes Marketplace metadata, documentation and matching lockfile metadata', async () => {
+  const manifest = JSON.parse(await fs.readFile(path.join(root, 'package.json'), 'utf8'));
+  const lockfile = JSON.parse(await fs.readFile(path.join(root, 'package-lock.json'), 'utf8'));
+  assert.equal(manifest.publisher, 'kele14x');
+  assert.equal(manifest.license, 'MIT');
+  assert.equal(manifest.repository.type, 'git');
+  assert.equal(manifest.repository.url, 'https://github.com/kele14x/dslx-vscode.git');
+  assert.equal(lockfile.version, manifest.version);
+  assert.equal(lockfile.packages[''].version, manifest.version);
+  assert.equal(lockfile.packages[''].license, manifest.license);
+  assert.match(await fs.readFile(path.join(root, 'LICENSE'), 'utf8'), /^MIT License\n/);
+  await fs.access(path.join(root, 'README.md'));
+});
+
 test('highlights declarations, imports, control flow and booleans', () => {
   const source = 'pub fn add(x: u32) -> u32 { if true { x } else { u32:0 } }\nstruct Packet { payload: u8 }\nenum Mode : u2 { IDLE = 0 }\ntype Word = u32;\nimport std;\nuse std::clog2;';
   hasScope(source, 'pub', 'storage.modifier.dslx');

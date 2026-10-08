@@ -5,7 +5,7 @@ const path = require('node:path');
 const vscode = require('vscode');
 
 exports.run = async () => {
-  const extension = vscode.extensions.getExtension('local.dslx-syntax');
+  const extension = vscode.extensions.getExtension('kele14x.dslx-syntax');
   assert.ok(extension, 'DSLX extension is registered');
   assert.equal(extension.packageJSON.main, undefined, 'No runtime is required');
   const directory = await fs.mkdtemp(path.join(os.tmpdir(), 'dslx-documents-'));
@@ -17,7 +17,12 @@ exports.run = async () => {
       assert.equal(document.languageId, 'dslx', `Recognizes .${suffix}`);
       const editor = await vscode.window.showTextDocument(document);
       editor.selection = new vscode.Selection(0, 0, 0, 0);
-      await vscode.commands.executeCommand('editor.action.commentLine');
+      const initialVersion = document.version;
+      const deadline = Date.now() + 5000;
+      // VS Code loads language configuration asynchronously when a language is first opened.
+      do {
+        await vscode.commands.executeCommand('editor.action.commentLine');
+      } while (document.version === initialVersion && Date.now() < deadline);
       assert.match(document.lineAt(0).text, /^\/\/\s*fn main/);
       await vscode.commands.executeCommand('editor.action.commentLine');
       assert.equal(document.lineAt(0).text, 'fn main() -> u32 { u32:42 }');

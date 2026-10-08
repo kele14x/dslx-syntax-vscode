@@ -2,10 +2,18 @@
   "name": "dslx-syntax",
   "displayName": "DSLX Syntax",
   "description": "Syntax highlighting and editing support for Google XLS DSLX, with no language server required.",
-  "version": "0.1.0",
-  "publisher": "local",
+  "version": "0.1.1",
+  "publisher": "kele14x",
   "private": true,
-  "license": "UNLICENSED",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/kele14x/dslx-vscode.git"
+  },
+  "homepage": "https://github.com/kele14x/dslx-vscode#readme",
+  "bugs": {
+    "url": "https://github.com/kele14x/dslx-vscode/issues"
+  },
   "engines": {
     "vscode": "^1.85.0"
   },
@@ -31,7 +39,7 @@
   "scripts": {
     "test": "node --test test/grammar.test.cjs",
     "test:editor": "node test/run-editor.cjs",
-    "package": "npm test && vsce package --allow-missing-repository --skip-license --no-dependencies"
+    "package": "npm test && vsce package --no-dependencies"
   },
   "devDependencies": {
     "@vscode/test-electron": "^3.1.0",
