@@ -1,8 +1,9 @@
-name: Build VSIX
+name: Test and release
 
 on:
   push:
     branches: [main]
+    tags: ['v*']
   pull_request:
   workflow_dispatch:
 
@@ -10,7 +11,7 @@ permissions:
   contents: read
 
 jobs:
-  build:
+  test:
     runs-on: ubuntu-latest
     timeout-minutes: 15
     steps:
@@ -26,12 +27,48 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
-      - name: Test and package extension
+      - name: Run tests
+        run: npm test
+
+  release:
+    if: github.event_name == 'push' && startsWith(github.ref, 'refs/tags/v')
+    needs: test
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    permissions:
+      contents: write
+    env:
+      RELEASE_TAG: ${{ github.ref_name }}
+    steps:
+      - name: Check out tagged commit
+        uses: actions/checkout@v5
+        with:
+          persist-credentials: false
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v5
+        with:
+          node-version: '24'
+          cache: npm
+
+      - name: Verify tag matches extension version
+        run: |
+          node <<'NODE'
+          const expectedTag = `v${require('./package.json').version}`;
+          if (process.env.RELEASE_TAG !== expectedTag) {
+            console.error(`Release tag must be ${expectedTag}, got ${process.env.RELEASE_TAG}`);
+            process.exit(1);
+          }
+          NODE
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build VSIX
         run: npm run package
 
-      - name: Upload VSIX
-        uses: actions/upload-artifact@v6
-        with:
-          name: dslx-vsix
-          path: '*.vsix'
-          if-no-files-found: error
+      - name: Publish GitHub Release
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+        run: gh release create "$RELEASE_TAG" ./*.vsix --verify-tag --title "$RELEASE_TAG" --generate-notes
