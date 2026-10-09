@@ -32,7 +32,7 @@ Visual Studio Code 1.85.0 or later. Node.js is only needed to develop or package
 
 ### From a VSIX
 
-1. Download a `.vsix` file from [GitHub Releases](https://github.com/kele14x/dslx-vscode/releases), or build one locally using the instructions below.
+1. Download a `.vsix` file from [GitHub Releases](https://github.com/kele14x/dslx-syntax-vscode/releases), or build one locally using the instructions below.
 2. Open the Extensions view in VS Code.
 3. Select **Install from VSIX...** from the Extensions view menu and choose the file.
 
@@ -80,7 +80,7 @@ GitHub Releases and the VS Code Marketplace are separate distribution channels. 
 
 ## Feedback
 
-Report highlighting issues with a small DSLX example and your VS Code version in [GitHub Issues](https://github.com/kele14x/dslx-vscode/issues).
+Report highlighting issues with a small DSLX example and your VS Code version in [GitHub Issues](https://github.com/kele14x/dslx-syntax-vscode/issues).
 
 ## License
 

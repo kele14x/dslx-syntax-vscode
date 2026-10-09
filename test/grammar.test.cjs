@@ -77,7 +77,7 @@ test('includes Marketplace metadata, documentation and matching lockfile metadat
   assert.equal(manifest.publisher, 'kele14x');
   assert.equal(manifest.license, 'MIT');
   assert.equal(manifest.repository.type, 'git');
-  assert.equal(manifest.repository.url, 'https://github.com/kele14x/dslx-vscode.git');
+  assert.equal(manifest.repository.url, 'https://github.com/kele14x/dslx-syntax-vscode.git');
   assert.equal(lockfile.version, manifest.version);
   assert.equal(lockfile.packages[''].version, manifest.version);
   assert.equal(lockfile.packages[''].license, manifest.license);
